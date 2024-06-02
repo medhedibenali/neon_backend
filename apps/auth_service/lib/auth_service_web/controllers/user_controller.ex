@@ -3,7 +3,7 @@ defmodule AuthServiceWeb.UserController do
 
   alias AuthService.Accounts
   alias AuthService.Accounts.User
-  alias AuthService.Guardian
+  alias AuthService.TokenExtraction
 
   action_fallback(AuthServiceWeb.FallbackController)
 
@@ -18,7 +18,8 @@ defmodule AuthServiceWeb.UserController do
   #   end
   # end
 
-  def follow(conn, %{"follower_id" => follower_id, "following_id" => following_id}) do
+  def follow(conn, %{"following_id" => following_id}) do
+    follower_id = TokenExtraction.fetch_id_from_conn(conn)
     Accounts.follow_user(follower_id, following_id)
 
     conn
@@ -26,7 +27,9 @@ defmodule AuthServiceWeb.UserController do
     |> json(%{"message" => "follow successful"})
   end
 
-  def unfollow(conn, %{"follower_id" => follower_id, "following_id" => following_id}) do
+  def unfollow(conn, %{"following_id" => following_id}) do
+    follower_id = TokenExtraction.fetch_id_from_conn(conn)
+
     case Accounts.unfollow_user(follower_id, following_id) do
       {:ok, message} ->
         conn

@@ -15,11 +15,10 @@ defmodule AuthServiceWeb.Router do
       post("/login", UserController, :login)
       post("/logout", UserController, :logout)
       post("/register", UserController, :register)
-      post("/follow/:follower_id/:following_id", UserController, :follow)
-      delete("/unfollow/:follower_id/:following_id", UserController, :unfollow)
+      post("/follow/:following_id", UserController, :follow)
+      delete("/unfollow/:following_id", UserController, :unfollow)
 
       get("/getKey", KeyController, :getKey)
-      
     end
   end
 
